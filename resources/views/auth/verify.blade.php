@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="flex flex-wrap justify-center">
-        <div class="w-full max-w-sm pr-4 pl-4">
+        <div class="w-full max-w-sm">
 
             @if (session('resent'))
                 <div class="text-sm border border-t-8 rounded text-green-darker border-green-dark bg-green-lightest px-3 py-4 mb-4" role="alert">
