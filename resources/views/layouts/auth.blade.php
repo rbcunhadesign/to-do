@@ -12,16 +12,31 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="bg-grey-lightest">
+<body class="bg-grey-lightest h-screen antialiased">
     <div id="app">
-        <div class="w-full flex bg-blue-darkest shadow-lg p-6">
-            <a href="/" class="font-semibold text-xl text-white no-underline">
-                {{ config('app.name', 'Laravel') }}
-            </a>
-        </div>
-        <main class="py-12">
-            @yield('content')
-        </main>
+        <nav class="bg-blue-darkest shadow mb-8 py-6">
+            <div class="container mx-auto px-6 md:px-0">
+                <div class="flex items-center justify-center">
+                    <div class="mr-6">
+                        <a href="{{ url('/') }}" class="text-lg font-semibold text-white no-underline">
+                            {{ config('app.name', 'Laravel') }}
+                        </a>
+                    </div>
+                    <div class="flex-1 text-right">
+                        @guest
+                            <a class="no-underline hover:underline text-grey-lightest text-sm p-3" href="{{ route('login') }}">
+                                {{ __('Login') }}
+                            </a>
+                            <a class="no-underline hover:underline text-grey-lightest text-sm p-3" href="{{ route('register') }}">
+                                {{ __('Register') }}
+                            </a>
+                        @endguest
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        @yield('content')
     </div>
 </body>
 </html>
