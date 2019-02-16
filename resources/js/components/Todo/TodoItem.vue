@@ -70,7 +70,6 @@
         background-color: #3490dc;
     }
 
-    /* Create the checkmark/indicator (hidden when not checked) */
     .checkmark:after {
         content: "";
         position: absolute;
@@ -79,13 +78,11 @@
         transition: all .5s linear;
     }
 
-    /* Show the checkmark when checked */
     .checkbox-container input:checked ~ .checkmark:after {
         display: block;
         opacity: 1;
     }
 
-    /* Style the checkmark/indicator */
     .checkbox-container .checkmark:after {
         left: 11px;
         top: 7px;
