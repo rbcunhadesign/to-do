@@ -12,3 +12,14 @@
 */
 
 Auth::routes(['verify' => true]);
+
+Route::middleware(['auth', 'verified'])
+    ->prefix('app')
+    ->as('app.')
+    ->group(function() {
+        Route::get('user', function(\Illuminate\Http\Request $request) {
+            return $request->user();
+        });
+    });
+
+Route::middleware('verified')->get('/{any}', 'SpaController')->where('any', '.*');
