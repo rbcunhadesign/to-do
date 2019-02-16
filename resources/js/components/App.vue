@@ -3,18 +3,23 @@
     <top-nav
       :user="user"
     />
+
+    <div class="container">
+      <todo />
+    </div>
   </div>
 </template>
 
 <script>
+  /*global axios*/
     import TopNav from "./Navigation/TopNav";
+  import Todo from "./Todo/Todo";
     export default {
       name: 'App',
-      components: {TopNav},
+      components: {Todo, TopNav},
 
       data() {
         return {
-          axios: window.axios,
           user: {},
         }
       },
@@ -25,7 +30,7 @@
 
       methods: {
         fetchUser() {
-          this.axios('/app/user')
+          axios('/app/user')
             .then(response => {
               this.user = response.data;
             })
