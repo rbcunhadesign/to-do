@@ -1,3 +1,6 @@
+/*global require*/
+/*global Vue*/
+/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "app" }]*/
 require('./bootstrap')
 
 window.Vue = require('vue')
