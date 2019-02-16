@@ -15,7 +15,7 @@
     <input
       v-model="title"
       type="text"
-      :class="[{ 'line-through': isComplete }, 'todo w-full text-lg text-grey-darker bg-transparent focus:outline-none']"
+      :class="['todo w-full text-lg text-grey-darker bg-transparent focus:outline-none', isComplete ? 'line-through text-grey' : '']"
       @blur="updateName"
     >
   </div>
@@ -62,7 +62,8 @@
 </script>
 
 <style scoped>
-  .checkbox {
+  .checkbox,
+  .todo {
     transition: all .5s linear
   }
 

@@ -14,7 +14,7 @@
           <div class="relative">
             <a
               href="javascript:void(0)"
-              class="text-sm text-grey-lightest no-underline hover:no-underline hover:text-grey focus:text-grey p-3"
+              class="toggle-dropdown text-sm text-grey-lightest no-underline hover:no-underline hover:text-grey focus:text-grey p-3"
               @click="toggleDropdown"
             >
               {{ user.name }} <span class="text-xs">
@@ -24,7 +24,7 @@
 
             <div
               v-show="dropdownIsOpen"
-              class="absolute pin-t pin-r mt-8 bg-white rounded shadow-lg"
+              class="dropdown-menu absolute pin-t pin-r mt-8 bg-white rounded shadow-lg"
             >
               <ul class="list-reset px-2 py-4">
                 <li>
@@ -73,6 +73,14 @@
         token: document.head.querySelector('meta[name="csrf-token"]').content,
         dropdownIsOpen: false,
       }
+    },
+
+    created() {
+      document.getElementsByTagName('html')[0].addEventListener('click', (e) => {
+        if (!e.target.classList.contains('dropdown-menu') && !e.target.classList.contains('toggle-dropdown')) {
+          this.dropdownIsOpen = false;
+        }
+      })
     },
 
     methods: {

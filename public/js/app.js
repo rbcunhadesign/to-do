@@ -1892,6 +1892,15 @@ __webpack_require__.r(__webpack_exports__);
       dropdownIsOpen: false
     };
   },
+  created: function created() {
+    var _this = this;
+
+    document.getElementsByTagName('html')[0].addEventListener('click', function (e) {
+      if (!e.target.classList.contains('dropdown-menu') && !e.target.classList.contains('toggle-dropdown')) {
+        _this.dropdownIsOpen = false;
+      }
+    });
+  },
   methods: {
     toggleDropdown: function toggleDropdown() {
       this.dropdownIsOpen = !this.dropdownIsOpen;
@@ -2105,7 +2114,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".checkbox[data-v-34aa3ae7] {\n  transition: all .5s linear;\n}\n.checkbox[data-v-34aa3ae7]:checked {\n  background-color: #3490dc;\n}\n\n/* Create the checkmark/indicator (hidden when not checked) */\n.checkmark[data-v-34aa3ae7]:after {\n  content: \"\";\n  position: absolute;\n  /*display: none;*/\n  opacity: 0;\n  transition: all .5s linear;\n}\n\n/* Show the checkmark when checked */\n.checkbox-container input:checked ~ .checkmark[data-v-34aa3ae7]:after {\n  display: block;\n  opacity: 1;\n}\n\n/* Style the checkmark/indicator */\n.checkbox-container .checkmark[data-v-34aa3ae7]:after {\n  left: 11px;\n  top: 7px;\n  width: 5px;\n  height: 10px;\n  border: solid white;\n  border-width: 0 3px 3px 0;\n  -webkit-transform: rotate(45deg);\n          transform: rotate(45deg);\n}\n", ""]);
+exports.push([module.i, ".checkbox[data-v-34aa3ae7],\n.todo[data-v-34aa3ae7] {\n  transition: all .5s linear;\n}\n.checkbox[data-v-34aa3ae7]:checked {\n  background-color: #3490dc;\n}\n.checkmark[data-v-34aa3ae7]:after {\n  content: \"\";\n  position: absolute;\n  /*display: none;*/\n  opacity: 0;\n  transition: all .5s linear;\n}\n.checkbox-container input:checked ~ .checkmark[data-v-34aa3ae7]:after {\n  display: block;\n  opacity: 1;\n}\n.checkbox-container .checkmark[data-v-34aa3ae7]:after {\n  left: 11px;\n  top: 7px;\n  width: 5px;\n  height: 10px;\n  border: solid white;\n  border-width: 0 3px 3px 0;\n  -webkit-transform: rotate(45deg);\n          transform: rotate(45deg);\n}\n", ""]);
 
 // exports
 
@@ -21647,7 +21656,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "text-sm text-grey-lightest no-underline hover:no-underline hover:text-grey focus:text-grey p-3",
+                  "toggle-dropdown text-sm text-grey-lightest no-underline hover:no-underline hover:text-grey focus:text-grey p-3",
                 attrs: { href: "javascript:void(0)" },
                 on: { click: _vm.toggleDropdown }
               },
@@ -21671,7 +21680,7 @@ var render = function() {
                   }
                 ],
                 staticClass:
-                  "absolute pin-t pin-r mt-8 bg-white rounded shadow-lg"
+                  "dropdown-menu absolute pin-t pin-r mt-8 bg-white rounded shadow-lg"
               },
               [
                 _c("ul", { staticClass: "list-reset px-2 py-4" }, [
@@ -21927,8 +21936,8 @@ var render = function() {
           }
         ],
         class: [
-          { "line-through": _vm.isComplete },
-          "todo w-full text-lg text-grey-darker bg-transparent focus:outline-none"
+          "todo w-full text-lg text-grey-darker bg-transparent focus:outline-none",
+          _vm.isComplete ? "line-through text-grey" : ""
         ],
         attrs: { type: "text" },
         domProps: { value: _vm.title },
