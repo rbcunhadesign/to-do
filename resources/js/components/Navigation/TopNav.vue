@@ -17,26 +17,18 @@
               class="text-sm text-grey-lightest no-underline hover:no-underline hover:text-grey focus:text-grey p-3"
               @click="toggleDropdown"
             >
-              {{ user.name }}
+              {{ user.name }} <span class="text-xs">&#x25BC;</span>
             </a>
 
             <div
               v-show="dropdownIsOpen"
               class="absolute pin-t pin-r mt-8 bg-white rounded shadow-lg"
             >
-              <ul class="list-reset p-2 py-4">
-                <li class="mb-4">
-                  <a
-                    href="#"
-                    class="text-grey-darkest hover:bg-grey-light rounded p-2 no-underline"
-                  >
-                    Link 1
-                  </a>
-                </li>
+              <ul class="list-reset px-2 py-4">
                 <li class="mb-3">
                   <a
                     href="#"
-                    class="text-grey-darkest hover:bg-grey-light rounded p-2 no-underline"
+                    class="text-grey-darkest hover:bg-grey-light rounded px-4 py-2 no-underline"
                   >
                     Profile
                   </a>
@@ -47,7 +39,7 @@
                 <li>
                   <a
                     href="javascript:void(0)"
-                    class="text-grey-darkest hover:bg-grey-light rounded p-2 no-underline"
+                    class="text-grey-darkest hover:bg-grey-light rounded px-4 py-2 no-underline"
                     @click="logout"
                   >
                     Logout
