@@ -9,6 +9,7 @@
         v-model="isComplete"
         type="checkbox"
         class="checkbox appearance-none bg-transparent border rounded-full shadow-inner p-3 mr-4 focus:outline-none"
+        :title="'Mark as ' + isComplete ? 'incomplete' : 'complete'"
       >
       <span class="checkmark" />
     </label>

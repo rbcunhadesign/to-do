@@ -1960,6 +1960,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /*global axios*/
 
@@ -2026,6 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -21777,7 +21780,7 @@ var render = function() {
           ],
           staticClass:
             "appearance-none w-full text-xl text-grey-darker bg-transparent border-b-2 border-grey focus:outline-none py-2 mb-1",
-          attrs: { type: "text", placeholder: "Buy groceries" },
+          attrs: { type: "text", placeholder: "Add new task" },
           domProps: { value: _vm.todo },
           on: {
             focus: function($event) {
@@ -21826,23 +21829,27 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "w-1/2 mx-auto" }, [
-      _c(
-        "div",
-        { staticClass: "w-full" },
-        _vm._l(_vm.todos, function(item, index) {
-          return _c("todo-item", {
-            key: item.id,
-            attrs: { todo: item, index: index },
-            on: {
-              changeStatus: function($event) {
-                return _vm.changeStatus(index)
-              },
-              changeName: _vm.changeName
-            }
-          })
-        }),
-        1
-      )
+      _vm.todos.length > 0
+        ? _c(
+            "div",
+            { staticClass: "w-full" },
+            _vm._l(_vm.todos, function(item, index) {
+              return _c("todo-item", {
+                key: item.id,
+                attrs: { todo: item, index: index },
+                on: {
+                  changeStatus: function($event) {
+                    return _vm.changeStatus(index)
+                  },
+                  changeName: _vm.changeName
+                }
+              })
+            }),
+            1
+          )
+        : _c("h3", { staticClass: "text-center text-grey mt-4" }, [
+            _vm._v("Good job your list is empty!")
+          ])
     ])
   ])
 }
@@ -21893,7 +21900,11 @@ var render = function() {
             ],
             staticClass:
               "checkbox appearance-none bg-transparent border rounded-full shadow-inner p-3 mr-4 focus:outline-none",
-            attrs: { id: "changeStatus", type: "checkbox" },
+            attrs: {
+              id: "changeStatus",
+              type: "checkbox",
+              title:  true ? "incomplete" : undefined
+            },
             domProps: {
               checked: Array.isArray(_vm.isComplete)
                 ? _vm._i(_vm.isComplete, null) > -1

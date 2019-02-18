@@ -5,7 +5,7 @@
         v-model="todo"
         type="text"
         class="appearance-none w-full text-xl text-grey-darker bg-transparent border-b-2 border-grey focus:outline-none py-2 mb-1"
-        placeholder="Buy groceries"
+        placeholder="Add new task"
         @focus="showHelperText = true"
         @blur="showHelperText = false"
         @keyup.enter="addToDo"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="w-1/2 mx-auto">
-      <div class="w-full">
+      <div v-if="todos.length > 0" class="w-full">
         <todo-item
           v-for="(item, index) in todos"
           :key="item.id"
@@ -31,6 +31,8 @@
           @changeName="changeName"
         />
       </div>
+
+      <h3 v-else class="text-center text-grey mt-4">Good job your list is empty!</h3>
     </div>
   </div>
 </template>
