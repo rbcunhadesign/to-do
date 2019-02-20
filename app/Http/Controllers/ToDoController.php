@@ -11,14 +11,18 @@ class ToDoController extends Controller
     /**
      * Fetches all to dos
      *
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
             'status' => 'success',
-            'data' => ToDo::groupBy(['id', 'user_id', 'title', 'complete', 'updated_at', 'created_at'])
-                ->orderBy('complete', 'asc')
+            'data' => ToDo::when($request->has('complete'), function($query) {
+                return $query->where('complete', '0');
+            })
+                ->orderBy('created_at', 'desc')
                 ->get(),
         ]);
     }
