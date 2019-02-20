@@ -21822,7 +21822,7 @@ var render = function() {
   return _c("div", { staticClass: "flex flex-col mt-0 md:mt-24" }, [
     _c(
       "div",
-      { staticClass: "w-3/4 mx-auto h-16" },
+      { staticClass: "w-full md:w-3/4 lg:w-1/2 mx-auto h-16" },
       [
         _c("input", {
           directives: [
@@ -21884,36 +21884,40 @@ var render = function() {
     ),
     _vm._v(" "),
     _vm.todos.length > 0 && !_vm.loading
-      ? _c("div", { staticClass: "flex w-3/4 mx-auto mt-4 mb-6" }, [
-          _c(
-            "span",
-            {
-              staticClass:
-                "text-xs text-red-lighter cursor-pointer hover:text-red",
-              on: { click: _vm.deleteComplete }
-            },
-            [_vm._v("\n      Remove completed tasks\n    ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "span",
-            {
-              staticClass:
-                "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
-              on: { click: _vm.toggleComplete }
-            },
-            [
-              _vm._v(
-                "\n      " +
-                  _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
-                  " complete\n    "
-              )
-            ]
-          )
-        ])
+      ? _c(
+          "div",
+          { staticClass: "flex w-full md:w-3/4 lg:w-1/2 mx-auto mt-4 mb-6" },
+          [
+            _c(
+              "span",
+              {
+                staticClass:
+                  "text-xs text-red-lighter cursor-pointer hover:text-red",
+                on: { click: _vm.deleteComplete }
+              },
+              [_vm._v("\n      Remove completed tasks\n    ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass:
+                  "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
+                on: { click: _vm.toggleComplete }
+              },
+              [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
+                    " complete\n    "
+                )
+              ]
+            )
+          ]
+        )
       : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "w-3/4 mx-auto" }, [
+    _c("div", { staticClass: "w-full md:w-3/4 lg:w-1/2 mx-auto" }, [
       _vm.todos.length > 0 && !_vm.loading
         ? _c(
             "div",

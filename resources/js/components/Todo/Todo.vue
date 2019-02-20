@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col mt-0 md:mt-24">
-    <div class="w-3/4 mx-auto h-16">
+    <div class="w-full md:w-3/4 lg:w-1/2 mx-auto h-16">
       <input
         v-model="todo"
         type="text"
@@ -20,7 +20,7 @@
       </transition>
     </div>
 
-    <div v-if="todos.length > 0 && !loading" class="flex w-3/4 mx-auto mt-4 mb-6">
+    <div v-if="todos.length > 0 && !loading" class="flex w-full md:w-3/4 lg:w-1/2 mx-auto mt-4 mb-6">
       <span class="text-xs text-red-lighter cursor-pointer hover:text-red"
             @click="deleteComplete"
       >
@@ -34,7 +34,7 @@
       </span>
     </div>
 
-    <div class="w-3/4 mx-auto">
+    <div class="w-full md:w-3/4 lg:w-1/2 mx-auto">
       <div v-if="todos.length > 0 && !loading" class="w-full">
         <todo-item
           v-for="(item, index) in todos"
