@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col mt-0 md:mt-24">
-    <div class="w-1/2 mx-auto h-16 mb-2">
+    <div class="w-3/4 mx-auto h-16">
       <input
         v-model="todo"
         type="text"
@@ -20,7 +20,21 @@
       </transition>
     </div>
 
-    <div class="w-1/2 mx-auto">
+    <div v-if="todos.length > 0 && !loading" class="flex w-3/4 mx-auto mt-4 mb-6">
+      <span class="text-xs text-red-lighter cursor-pointer hover:text-red"
+            @click="deleteComplete"
+      >
+        Remove completed tasks
+      </span>
+
+      <span class="text-xs text-blue-light cursor-pointer ml-auto hover:text-blue"
+            @click="toggleComplete"
+      >
+        {{ showCompleteOnly ? 'Show' : 'Hide' }} complete
+      </span>
+    </div>
+
+    <div class="w-3/4 mx-auto">
       <div v-if="todos.length > 0 && !loading" class="w-full">
         <todo-item
           v-for="(item, index) in todos"
@@ -29,6 +43,7 @@
           :index="index"
           @changeStatus="changeStatus(index)"
           @changeName="changeName"
+          @deleteTodo="deleteTodo"
         />
       </div>
 
@@ -52,7 +67,8 @@
         todo: null,
         todos: [],
         showHelperText: false,
-        id: 1,
+        showCompleteOnly: false,
+        next_id: null,
       }
     },
 
@@ -61,8 +77,11 @@
     },
 
     methods: {
-      fetchToDos() {
-        axios('/app/todo')
+      fetchToDos(completeOnly = false) {
+        let base = '/app/todo';
+        let url = completeOnly ? base + '?complete' : base;
+
+        axios(url)
           .then(response => {
             this.todos = response.data.data;
             this.loading = false;
@@ -75,35 +94,80 @@
       addToDo() {
         if (this.todo !== null && this.todo.length > 0) {
 
-          axios.post('/app/todo', {
-            title: this.todo,
-          })
-            .then(response => {
-              this.todos.unshift({
-                id: response.data.next_id - 1,
-                title: this.todo,
-                complete: false
-              });
-              this.todo = '';
+          if (this.next_id === null) {
+            axios.post('/app/todo', {
+              title: this.todo,
             })
+              .then(response => {
+                this.todos.unshift({
+                  id: response.data.next_id - 1,
+                  title: this.todo,
+                  complete: false
+                });
+                this.todo = '';
+                this.next_id = response.data.next_id;
+              })
               .catch(() => {
                 console.warn('Cannot create to-dos at this time')
               });
+          } else {
+            let title = this.todo;
+            this.todos.unshift({
+              id: this.next_id++,
+              title: this.todo,
+              complete: false
+            });
+            this.todo = '';
+
+            axios.post('/app/todo', {
+              title: title,
+            })
+              .then(response => {
+
+              })
+              .catch(() => {
+                this.todos.splice(0, 1);
+                this.todo = title;
+                this.next_id--;
+                console.warn('Cannot create to-dos at this time')
+              });
+          }
         }
       },
 
-      findInArray(id) {
-        return this.todos.findIndex(function(element) {
-          return element.id === id;
-        });
-      },
-
       changeStatus(index) {
-        this.todos[index].complete = this.todos[index].complete ? 0 : 1;
+        if (this.showCompleteOnly) {
+          setTimeout(() => {
+            this.todos.splice(index, 1);
+          }, 500)
+        } else {
+          this.todos[index].complete = this.todos[index].complete ? 0 : 1;
+        }
       },
 
       changeName(index, newName) {
         this.todos[index].title = newName;
+      },
+
+      toggleComplete() {
+        this.showCompleteOnly = !this.showCompleteOnly;
+        this.fetchToDos(this.showCompleteOnly)
+      },
+
+      deleteTodo(index) {
+        setTimeout(() => {
+          this.todos.splice(index, 1);
+        }, 200);
+      },
+
+      deleteComplete() {
+        axios.delete('/app/todo')
+          .then(() => {
+            this.fetchToDos(this.showCompleteOnly)
+          })
+          .catch(() => {
+            console.warn('Cannot delete to-dos at this time..')
+          })
       },
     }
   }

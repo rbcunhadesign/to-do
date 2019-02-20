@@ -1964,6 +1964,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /*global axios*/
 
@@ -1978,7 +1993,8 @@ __webpack_require__.r(__webpack_exports__);
       todo: null,
       todos: [],
       showHelperText: false,
-      id: 1
+      showCompleteOnly: false,
+      next_id: null
     };
   },
   created: function created() {
@@ -1988,7 +2004,10 @@ __webpack_require__.r(__webpack_exports__);
     fetchToDos: function fetchToDos() {
       var _this = this;
 
-      axios('/app/todo').then(function (response) {
+      var completeOnly = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var base = '/app/todo';
+      var url = completeOnly ? base + '?complete' : base;
+      axios(url).then(function (response) {
         _this.todos = response.data.data;
         _this.loading = false;
       }).catch(function () {
@@ -1999,31 +2018,74 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.todo !== null && this.todo.length > 0) {
-        axios.post('/app/todo', {
-          title: this.todo
-        }).then(function (response) {
-          _this2.todos.unshift({
-            id: response.data.next_id - 1,
-            title: _this2.todo,
+        if (this.next_id === null) {
+          axios.post('/app/todo', {
+            title: this.todo
+          }).then(function (response) {
+            _this2.todos.unshift({
+              id: response.data.next_id - 1,
+              title: _this2.todo,
+              complete: false
+            });
+
+            _this2.todo = '';
+            _this2.next_id = response.data.next_id;
+          }).catch(function () {
+            console.warn('Cannot create to-dos at this time');
+          });
+        } else {
+          var title = this.todo;
+          this.todos.unshift({
+            id: this.next_id++,
+            title: this.todo,
             complete: false
           });
+          this.todo = '';
+          axios.post('/app/todo', {
+            title: title
+          }).then(function (response) {}).catch(function () {
+            _this2.todos.splice(0, 1);
 
-          _this2.todo = '';
-        }).catch(function () {
-          console.warn('Cannot create to-dos at this time');
-        });
+            _this2.todo = title;
+            _this2.next_id--;
+            console.warn('Cannot create to-dos at this time');
+          });
+        }
       }
     },
-    findInArray: function findInArray(id) {
-      return this.todos.findIndex(function (element) {
-        return element.id === id;
-      });
-    },
     changeStatus: function changeStatus(index) {
-      this.todos[index].complete = this.todos[index].complete ? 0 : 1;
+      var _this3 = this;
+
+      if (this.showCompleteOnly) {
+        setTimeout(function () {
+          _this3.todos.splice(index, 1);
+        }, 500);
+      } else {
+        this.todos[index].complete = this.todos[index].complete ? 0 : 1;
+      }
     },
     changeName: function changeName(index, newName) {
       this.todos[index].title = newName;
+    },
+    toggleComplete: function toggleComplete() {
+      this.showCompleteOnly = !this.showCompleteOnly;
+      this.fetchToDos(this.showCompleteOnly);
+    },
+    deleteTodo: function deleteTodo(index) {
+      var _this4 = this;
+
+      setTimeout(function () {
+        _this4.todos.splice(index, 1);
+      }, 200);
+    },
+    deleteComplete: function deleteComplete() {
+      var _this5 = this;
+
+      axios.delete('/app/todo').then(function () {
+        _this5.fetchToDos(_this5.showCompleteOnly);
+      }).catch(function () {
+        console.warn('Cannot delete to-dos at this time..');
+      });
     }
   }
 });
@@ -2039,6 +2101,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2095,6 +2166,7 @@ __webpack_require__.r(__webpack_exports__);
     updateName: function updateName() {
       var _this2 = this;
 
+      if (this.title === this.todo.title) return;
       axios.patch("/app/todo/".concat(this.todo.id, "/title"), {
         title: this.title
       }).then(function () {
@@ -2102,6 +2174,15 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function () {
         _this2.title = _this2.todo.title;
         console.warn('Cannot update title at this time..');
+      });
+    },
+    deleteTodo: function deleteTodo() {
+      var _this3 = this;
+
+      axios.delete("/app/todo/".concat(this.todo.id)).then(function () {
+        _this3.$emit('deleteTodo', _this3.index);
+      }).catch(function () {
+        console.warn('Cannot delete to-dos at this time..');
       });
     }
   }
@@ -21741,7 +21822,7 @@ var render = function() {
   return _c("div", { staticClass: "flex flex-col mt-0 md:mt-24" }, [
     _c(
       "div",
-      { staticClass: "w-1/2 mx-auto h-16 mb-2" },
+      { staticClass: "w-3/4 mx-auto h-16" },
       [
         _c("input", {
           directives: [
@@ -21802,7 +21883,37 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "w-1/2 mx-auto" }, [
+    _vm.todos.length > 0 && !_vm.loading
+      ? _c("div", { staticClass: "flex w-3/4 mx-auto mt-4 mb-6" }, [
+          _c(
+            "span",
+            {
+              staticClass:
+                "text-xs text-red-lighter cursor-pointer hover:text-red",
+              on: { click: _vm.deleteComplete }
+            },
+            [_vm._v("\n      Remove completed tasks\n    ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass:
+                "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
+              on: { click: _vm.toggleComplete }
+            },
+            [
+              _vm._v(
+                "\n      " +
+                  _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
+                  " complete\n    "
+              )
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "w-3/4 mx-auto" }, [
       _vm.todos.length > 0 && !_vm.loading
         ? _c(
             "div",
@@ -21815,7 +21926,8 @@ var render = function() {
                   changeStatus: function($event) {
                     return _vm.changeStatus(index)
                   },
-                  changeName: _vm.changeName
+                  changeName: _vm.changeName,
+                  deleteTodo: _vm.deleteTodo
                 }
               })
             }),
@@ -21855,7 +21967,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "flex flex-row items-center border-b border-grey-light py-2 mb-2"
+        "group relative flex flex-row items-center border-b border-grey-light py-2 mb-2"
     },
     [
       _c(
@@ -21912,27 +22024,71 @@ var render = function() {
         directives: [
           {
             name: "model",
-            rawName: "v-model",
+            rawName: "v-model.trim",
             value: _vm.title,
-            expression: "title"
+            expression: "title",
+            modifiers: { trim: true }
           }
         ],
         class: [
-          "todo w-full text-lg text-grey-darker bg-transparent focus:outline-none",
+          "todo w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black",
           _vm.checked ? "line-through text-grey" : ""
         ],
         attrs: { type: "text" },
         domProps: { value: _vm.title },
         on: {
-          blur: _vm.updateName,
+          blur: [
+            _vm.updateName,
+            function($event) {
+              return _vm.$forceUpdate()
+            }
+          ],
           input: function($event) {
             if ($event.target.composing) {
               return
             }
-            _vm.title = $event.target.value
+            _vm.title = $event.target.value.trim()
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "absolute pin-r hidden group-hover:block p-1 cursor-pointer text-grey hover:text-red bg-transparent",
+          on: { click: _vm.deleteTodo }
+        },
+        [
+          _c(
+            "svg",
+            {
+              staticClass: "stroke-current fill-current w-4",
+              attrs: {
+                xmlns: "http://www.w3.org/2000/svg",
+                viewBox: "0 0 24 24"
+              }
+            },
+            [
+              _c("path", {
+                staticClass: "primary",
+                attrs: {
+                  d:
+                    "M5 5h14l-.89 15.12a2 2 0 0 1-2 1.88H7.9a2 2 0 0 1-2-1.88L5 5zm5 5a1 1 0 0 0-1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0-1-1zm4 0a1 1 0 0 0-1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0-1-1z"
+                }
+              }),
+              _vm._v(" "),
+              _c("path", {
+                staticClass: "secondary",
+                attrs: {
+                  d:
+                    "M8.59 4l1.7-1.7A1 1 0 0 1 11 2h2a1 1 0 0 1 .7.3L15.42 4H19a1 1 0 0 1 0 2H5a1 1 0 1 1 0-2h3.59z"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ]
   )
 }
