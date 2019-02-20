@@ -56,6 +56,23 @@ class ToDoCrudTest extends TestCase
     }
 
     /** @test */
+    public function user_can_fetch_incomplete_to_dos()
+    {
+        Auth::login($user = factory(User::class)->create());
+
+        $todo1 = factory(ToDo::class)->create(['user_id' => $user->id, 'complete' => 0]);
+        factory(ToDo::class, 3)->create(['user_id' => $user->id, 'complete' => 1]);
+
+        $this->json('get', route('app.todo-fetch') . '?complete')
+            ->assertJson([
+                'status' => 'success',
+                'data' => [
+                    $todo1->toArray(),
+                ]
+            ]);
+    }
+
+    /** @test */
     public function user_can_update_to_do_name()
     {
         Auth::login($user = factory(User::class)->create());
