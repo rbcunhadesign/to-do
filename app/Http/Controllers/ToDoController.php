@@ -17,7 +17,9 @@ class ToDoController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'data' => ToDo::groupBy(['id', 'user_id', 'title', 'complete'])->get(),
+            'data' => ToDo::groupBy(['id', 'user_id', 'title', 'complete', 'updated_at', 'created_at'])
+                ->orderBy('complete', 'asc')
+                ->get(),
         ]);
     }
 
