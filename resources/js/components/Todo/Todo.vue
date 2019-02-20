@@ -21,7 +21,7 @@
     </div>
 
     <div class="w-1/2 mx-auto">
-      <div v-if="todos.length > 0" class="w-full">
+      <div v-if="todos.length > 0 && !loading" class="w-full">
         <todo-item
           v-for="(item, index) in todos"
           :key="item.id"
@@ -32,7 +32,9 @@
         />
       </div>
 
-      <h3 v-else class="text-center text-grey mt-4">Good job your list is empty!</h3>
+      <h3 v-else-if="todos.length < 1 && !loading" class="text-center text-grey mt-4">
+        Good job your list is empty!
+      </h3>
     </div>
   </div>
 </template>
@@ -46,6 +48,7 @@
     components: {TodoItem},
     data() {
       return {
+        loading: true,
         todo: null,
         todos: [],
         showHelperText: false,
@@ -54,32 +57,38 @@
     },
 
     created() {
-      // this.fetchToDos();
+      this.fetchToDos();
     },
 
     methods: {
       fetchToDos() {
         axios('/app/todo')
           .then(response => {
-            this.todos.incomplete = response.data.incomplete;
-            this.todos.complete = response.data.complete;
+            this.todos = response.data.data;
+            this.loading = false;
           })
           .catch(() => {
             console.warn('Cannot get to-dos at this time...')
           })
       },
       
-      addToDo(e) {
+      addToDo() {
         if (this.todo !== null && this.todo.length > 0) {
 
-          // Make axios request
-
-          this.todos.unshift({
-            id: this.id++,
-            todo: e.target.value,
-            isComplete: false
-          });
-          this.todo = '';
+          axios.post('/app/todo', {
+            title: this.todo,
+          })
+            .then(response => {
+              this.todos.unshift({
+                id: response.data.next_id - 1,
+                title: this.todo,
+                complete: false
+              });
+              this.todo = '';
+            })
+              .catch(() => {
+                console.warn('Cannot create to-dos at this time')
+              });
         }
       },
 
@@ -90,14 +99,11 @@
       },
 
       changeStatus(index) {
-        // Make axios request
-
-        this.todos[index].isComplete = !this.todos[index].isComplete;
-
+        this.todos[index].complete = this.todos[index].complete ? 0 : 1;
       },
 
       changeName(index, newName) {
-        this.todos[index].todo = newName;
+        this.todos[index].title = newName;
       },
     }
   }
