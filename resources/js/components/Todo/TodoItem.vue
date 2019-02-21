@@ -10,14 +10,16 @@
       </svg>
       </span>
     </div>
-    <input
-      v-model.trim="title"
-      type="text"
-      :class="['todo w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black', checked ? 'line-through text-grey' : '']"
-      @blur="updateName"
-    >
 
-    <div class="absolute pin-r hidden group-hover:block p-1 cursor-pointer text-grey hover:text-red bg-transparent"
+    <textarea-autosize
+      v-model.trim="title"
+      :class="['todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black', checked ? 'line-through text-grey' : '']"
+      :min-height="20"
+      @blur.native="updateName"
+    >
+    </textarea-autosize>
+
+    <div class="absolute pin-r block md:hidden group-hover:block p-1 cursor-pointer text-grey hover:text-red bg-transparent"
          @click="deleteTodo"
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="stroke-current fill-current w-4">

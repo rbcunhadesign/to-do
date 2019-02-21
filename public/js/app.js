@@ -2142,6 +2142,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /*global axios*/
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -22103,35 +22105,23 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model.trim",
-            value: _vm.title,
-            expression: "title",
-            modifiers: { trim: true }
-          }
-        ],
+      _c("textarea-autosize", {
         class: [
-          "todo w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black",
+          "todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black",
           _vm.checked ? "line-through text-grey" : ""
         ],
-        attrs: { type: "text" },
-        domProps: { value: _vm.title },
-        on: {
-          blur: [
-            _vm.updateName,
-            function($event) {
-              return _vm.$forceUpdate()
-            }
-          ],
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.title = $event.target.value.trim()
+        attrs: { "min-height": 20 },
+        nativeOn: {
+          blur: function($event) {
+            return _vm.updateName($event)
           }
+        },
+        model: {
+          value: _vm.title,
+          callback: function($$v) {
+            _vm.title = typeof $$v === "string" ? $$v.trim() : $$v
+          },
+          expression: "title"
         }
       }),
       _vm._v(" "),
@@ -22139,7 +22129,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "absolute pin-r hidden group-hover:block p-1 cursor-pointer text-grey hover:text-red bg-transparent",
+            "absolute pin-r block md:hidden group-hover:block p-1 cursor-pointer text-grey hover:text-red bg-transparent",
           on: { click: _vm.deleteTodo }
         },
         [
@@ -22172,7 +22162,8 @@ var render = function() {
           )
         ]
       )
-    ]
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -22285,6 +22276,37 @@ function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.common.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.common.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {module.exports=function(modules){function __webpack_require__(moduleId){if(installedModules[moduleId])return installedModules[moduleId].exports;var module=installedModules[moduleId]={i:moduleId,l:!1,exports:{}};return modules[moduleId].call(module.exports,module,module.exports,__webpack_require__),module.l=!0,module.exports}var installedModules={};return __webpack_require__.m=modules,__webpack_require__.c=installedModules,__webpack_require__.i=function(value){return value},__webpack_require__.d=function(exports,name,getter){__webpack_require__.o(exports,name)||Object.defineProperty(exports,name,{configurable:!1,enumerable:!0,get:getter})},__webpack_require__.n=function(module){var getter=module&&module.__esModule?function(){return module.default}:function(){return module};return __webpack_require__.d(getter,"a",getter),getter},__webpack_require__.o=function(object,property){return Object.prototype.hasOwnProperty.call(object,property)},__webpack_require__.p="",__webpack_require__(__webpack_require__.s=1)}([function(module,exports,__webpack_require__){var Component=__webpack_require__(3)(__webpack_require__(2),__webpack_require__(4),null,null);module.exports=Component.exports},function(module,__webpack_exports__,__webpack_require__){"use strict";function install(Vue){Vue.component("textarea-autosize",__WEBPACK_IMPORTED_MODULE_0__components_TextareaAutosize_vue___default.a)}Object.defineProperty(__webpack_exports__,"__esModule",{value:!0}),__webpack_exports__.install=install;var __WEBPACK_IMPORTED_MODULE_0__components_TextareaAutosize_vue__=__webpack_require__(0),__WEBPACK_IMPORTED_MODULE_0__components_TextareaAutosize_vue___default=__webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_TextareaAutosize_vue__);__webpack_require__.d(__webpack_exports__,"TextareaAutosize",function(){return __WEBPACK_IMPORTED_MODULE_0__components_TextareaAutosize_vue___default.a});var plugin={version:"1.0.4",install:install};__webpack_exports__.default=plugin;var GlobalVue=null;"undefined"!=typeof window?GlobalVue=window.Vue:"undefined"!=typeof global&&(GlobalVue=global.Vue),GlobalVue&&GlobalVue.use(plugin)},function(module,__webpack_exports__,__webpack_require__){"use strict";Object.defineProperty(__webpack_exports__,"__esModule",{value:!0}),__webpack_exports__.default={name:"TextareaAutosize",created:function(){this.updateVal()},mounted:function(){this.resize()},props:{value:{type:[String,Number],default:""},autosize:{type:Boolean,default:!0},minHeight:{type:[Number],default:null},maxHeight:{type:[Number],default:null},important:{type:[Boolean,Array],default:!1}},data:function(){return{val:null,maxHeightScroll:!1}},computed:{computedStyles:function(){var objStyles={};return this.autosize&&(objStyles.resize=this.isResizeImportant?"none !important":"none",this.maxHeightScroll||(objStyles.overflow=this.isOverflowImportant?"hidden !important":"hidden")),objStyles},isResizeImportant:function(){var imp=this.important;return!0===imp||Array.isArray(imp)&&imp.includes("resize")},isOverflowImportant:function(){var imp=this.important;return!0===imp||Array.isArray(imp)&&imp.includes("overflow")},isHeightImportant:function(){var imp=this.important;return!0===imp||Array.isArray(imp)&&imp.includes("height")}},methods:{updateVal:function(){this.val=this.value},resize:function(){var important=this.isHeightImportant?"important":void 0;this.$el.style.setProperty("height","auto",important);var contentHeight=this.$el.scrollHeight+1;this.minHeight&&(contentHeight=contentHeight<this.minHeight?this.minHeight:contentHeight),this.maxHeight&&(contentHeight>this.maxHeight?(contentHeight=this.maxHeight,this.maxHeightScroll=!0):this.maxHeightScroll=!1);var heightVal=contentHeight+"px";return this.$el.style.setProperty("height",heightVal,important),this}},watch:{value:function(){this.updateVal()},val:function(_val){this.$nextTick(this.resize),this.$emit("input",_val)}}}},function(module,exports){module.exports=function(rawScriptExports,compiledTemplate,scopeId,cssModules){var esModule,scriptExports=rawScriptExports=rawScriptExports||{},type=typeof rawScriptExports.default;"object"!==type&&"function"!==type||(esModule=rawScriptExports,scriptExports=rawScriptExports.default);var options="function"==typeof scriptExports?scriptExports.options:scriptExports;if(compiledTemplate&&(options.render=compiledTemplate.render,options.staticRenderFns=compiledTemplate.staticRenderFns),scopeId&&(options._scopeId=scopeId),cssModules){var computed=options.computed||(options.computed={});Object.keys(cssModules).forEach(function(key){var module=cssModules[key];computed[key]=function(){return module}})}return{esModule:esModule,exports:scriptExports,options:options}}},function(module,exports){module.exports={render:function(){var _vm=this,_h=_vm.$createElement;return(_vm._self._c||_h)("textarea",{directives:[{name:"model",rawName:"v-model",value:_vm.val,expression:"val"}],style:_vm.computedStyles,domProps:{value:_vm.val},on:{focus:_vm.resize,input:function($event){$event.target.composing||(_vm.val=$event.target.value)}}})},staticRenderFns:[]}}]);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/vue-textarea-autosize/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/vue-textarea-autosize/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dist/vue-textarea-autosize.common.js */ "./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.common.js");
+/* harmony import */ var _dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+/* harmony default export */ __webpack_exports__["default"] = (_dist_vue_textarea_autosize_common_js__WEBPACK_IMPORTED_MODULE_0___default.a);
+
 
 
 /***/ }),
@@ -34239,6 +34261,7 @@ module.exports = function(module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var vue_textarea_autosize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-textarea-autosize */ "./node_modules/vue-textarea-autosize/index.js");
 /*global require*/
 
 /*global Vue*/
@@ -34248,6 +34271,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
+
+Vue.use(vue_textarea_autosize__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var app = new Vue({
   el: '#app',
   render: function render(h) {
