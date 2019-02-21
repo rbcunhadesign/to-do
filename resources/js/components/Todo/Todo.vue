@@ -30,7 +30,7 @@
       <span class="text-xs text-blue-light cursor-pointer ml-auto hover:text-blue"
             @click="toggleComplete"
       >
-        {{ showCompleteOnly ? 'Show' : 'Hide' }} complete
+        {{ showIncompleteOnly ? 'Show' : 'Hide' }} complete
       </span>
     </div>
 
@@ -48,10 +48,10 @@
       </div>
 
       <div v-else-if="todos.length < 1 && !loading" class="flex flex-col w-full mt-4 mb-6">
-        <span class="text-xs text-blue-light cursor-pointer ml-auto hover:text-blue"
+        <span v-if="showIncompleteOnly" class="text-xs text-blue-light cursor-pointer ml-auto hover:text-blue"
               @click="toggleComplete"
         >
-        {{ showCompleteOnly ? 'Show' : 'Hide' }} complete
+        Show complete
       </span>
         <h3 class="text-center text-grey mt-4">
           Good job your list is empty!
@@ -74,7 +74,7 @@
         todo: null,
         todos: [],
         showHelperText: false,
-        showCompleteOnly: false,
+        showIncompleteOnly: false,
         next_id: null, // this ID is a dummy id just so Vue can use it as a v-key
       }
     },
@@ -143,7 +143,7 @@
       },
 
       changeStatus(index) {
-        if (this.showCompleteOnly) {
+        if (this.showIncompleteOnly) {
           setTimeout(() => {
             this.todos.splice(index, 1);
           }, 500)
@@ -157,8 +157,8 @@
       },
 
       toggleComplete() {
-        this.showCompleteOnly = !this.showCompleteOnly;
-        this.fetchToDos(this.showCompleteOnly)
+        this.showIncompleteOnly = !this.showIncompleteOnly;
+        this.fetchToDos(this.showIncompleteOnly)
       },
 
       deleteTodo(index) {
@@ -170,7 +170,7 @@
       deleteComplete() {
         axios.delete('/app/todo')
           .then(() => {
-            this.fetchToDos(this.showCompleteOnly)
+            this.fetchToDos(this.showIncompleteOnly)
           })
           .catch(() => {
             console.warn('Cannot delete to-dos at this time..')

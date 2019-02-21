@@ -2000,7 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
       todo: null,
       todos: [],
       showHelperText: false,
-      showCompleteOnly: false,
+      showIncompleteOnly: false,
       next_id: null // this ID is a dummy id just so Vue can use it as a v-key
 
     };
@@ -2067,7 +2067,7 @@ __webpack_require__.r(__webpack_exports__);
     changeStatus: function changeStatus(index) {
       var _this3 = this;
 
-      if (this.showCompleteOnly) {
+      if (this.showIncompleteOnly) {
         setTimeout(function () {
           _this3.todos.splice(index, 1);
         }, 500);
@@ -2079,8 +2079,8 @@ __webpack_require__.r(__webpack_exports__);
       this.todos[index].title = newName;
     },
     toggleComplete: function toggleComplete() {
-      this.showCompleteOnly = !this.showCompleteOnly;
-      this.fetchToDos(this.showCompleteOnly);
+      this.showIncompleteOnly = !this.showIncompleteOnly;
+      this.fetchToDos(this.showIncompleteOnly);
     },
     deleteTodo: function deleteTodo(index) {
       var _this4 = this;
@@ -2093,7 +2093,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       axios.delete('/app/todo').then(function () {
-        _this5.fetchToDos(_this5.showCompleteOnly);
+        _this5.fetchToDos(_this5.showIncompleteOnly);
       }).catch(function () {
         console.warn('Cannot delete to-dos at this time..');
       });
@@ -21971,7 +21971,7 @@ var render = function() {
               [
                 _vm._v(
                   "\n      " +
-                    _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
+                    _vm._s(_vm.showIncompleteOnly ? "Show" : "Hide") +
                     " complete\n    "
                 )
               ]
@@ -22002,21 +22002,17 @@ var render = function() {
           )
         : _vm.todos.length < 1 && !_vm.loading
         ? _c("div", { staticClass: "flex flex-col w-full mt-4 mb-6" }, [
-            _c(
-              "span",
-              {
-                staticClass:
-                  "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
-                on: { click: _vm.toggleComplete }
-              },
-              [
-                _vm._v(
-                  "\n      " +
-                    _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
-                    " complete\n    "
+            _vm.showIncompleteOnly
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
+                    on: { click: _vm.toggleComplete }
+                  },
+                  [_vm._v("\n      Show complete\n    ")]
                 )
-              ]
-            ),
+              : _vm._e(),
             _vm._v(" "),
             _c("h3", { staticClass: "text-center text-grey mt-4" }, [
               _vm._v("\n        Good job your list is empty!\n      ")
