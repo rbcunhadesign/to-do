@@ -1,6 +1,6 @@
 <template>
-  <div :class="['group relative flex flex-row items-center border-b border-grey-light py-2 mb-2', { deleting: deleting }]">
-    <div :class="['rounded-full border mr-4', checked ? '' : 'p-3 shadow-inner']"
+  <div :class="['group relative flex flex-row items-center border-b border-grey-light mb-2', { deleting: deleting }]">
+    <div :class="['self-start rounded-full border mr-4', checked ? '' : 'p-3 shadow-inner']"
          role="checkbox"
          @click="changeStatus"
     >
@@ -13,8 +13,7 @@
 
     <textarea-autosize
       v-model.trim="title"
-      :class="['todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black', checked ? 'line-through text-grey' : '']"
-      :min-height="20"
+      :class="['appearance-none todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black', checked ? 'line-through text-grey' : '']"
       @blur.native="updateName"
     >
     </textarea-autosize>

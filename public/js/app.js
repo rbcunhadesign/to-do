@@ -2145,7 +2145,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /*global axios*/
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -22052,7 +22051,7 @@ var render = function() {
     "div",
     {
       class: [
-        "group relative flex flex-row items-center border-b border-grey-light py-2 mb-2",
+        "group relative flex flex-row items-center border-b border-grey-light mb-2",
         { deleting: _vm.deleting }
       ]
     },
@@ -22061,7 +22060,7 @@ var render = function() {
         "div",
         {
           class: [
-            "rounded-full border mr-4",
+            "self-start rounded-full border mr-4",
             _vm.checked ? "" : "p-3 shadow-inner"
           ],
           attrs: { role: "checkbox" },
@@ -22109,10 +22108,9 @@ var render = function() {
       _vm._v(" "),
       _c("textarea-autosize", {
         class: [
-          "todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black",
+          "appearance-none todo w-3/4 md:w-4/5 max-w-full text-lg text-grey-darker bg-transparent focus:outline-none focus:text-black",
           _vm.checked ? "line-through text-grey" : ""
         ],
-        attrs: { "min-height": 20 },
         nativeOn: {
           blur: function($event) {
             return _vm.updateName($event)
