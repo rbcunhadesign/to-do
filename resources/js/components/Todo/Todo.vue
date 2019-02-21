@@ -98,7 +98,8 @@
           })
       },
       
-      addToDo() {
+      addToDo(e) {
+        e.target.blur();
         if (this.todo !== null && this.todo.length > 0) {
 
           if (this.next_id === null) {

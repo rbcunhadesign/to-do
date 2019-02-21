@@ -2022,8 +2022,10 @@ __webpack_require__.r(__webpack_exports__);
         console.warn('Cannot get to-dos at this time...');
       });
     },
-    addToDo: function addToDo() {
+    addToDo: function addToDo(e) {
       var _this2 = this;
+
+      e.target.blur();
 
       if (this.todo !== null && this.todo.length > 0) {
         if (this.next_id === null) {
@@ -2237,7 +2239,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".deleting[data-v-34aa3ae7] {\n  -webkit-animation: fade-out-data-v-34aa3ae7 .4s linear;\n          animation: fade-out-data-v-34aa3ae7 .4s linear;\n}\n@-webkit-keyframes fade-out-data-v-34aa3ae7 {\nfrom {\n    opacity: 1;\n}\nto {\n    opacity: 0;\n}\n}\n@keyframes fade-out-data-v-34aa3ae7 {\nfrom {\n    opacity: 1;\n}\nto {\n    opacity: 0;\n}\n}\n", ""]);
+exports.push([module.i, ".deleting[data-v-34aa3ae7] {\n  -webkit-animation: fade-out-data-v-34aa3ae7 .4s linear forwards;\n          animation: fade-out-data-v-34aa3ae7 .4s linear forwards;\n}\n@-webkit-keyframes fade-out-data-v-34aa3ae7 {\nfrom {\n    opacity: 1;\n}\nto {\n    opacity: 0;\n    display: none;\n}\n}\n@keyframes fade-out-data-v-34aa3ae7 {\nfrom {\n    opacity: 1;\n}\nto {\n    opacity: 0;\n    display: none;\n}\n}\n", ""]);
 
 // exports
 
