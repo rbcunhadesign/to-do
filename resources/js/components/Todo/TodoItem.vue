@@ -99,11 +99,11 @@
 
 <style scoped>
   .deleting {
-    animation: fade-out .4s linear;
+    animation: fade-out .4s linear forwards;
   }
 
     @keyframes fade-out {
-      from { opacity: 1 }
-      to { opacity: 0 }
+      from { opacity: 1; }
+      to { opacity: 0; display: none; }
     }
 </style>
