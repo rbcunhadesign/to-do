@@ -19,9 +19,10 @@ class ToDoController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'data' => ToDo::when($request->has('complete'), function($query) {
+            'data' => ToDo::where('user_id', $request->user()->id)
+                ->when($request->has('complete'), function($query) {
                 return $query->where('complete', '0');
-            })
+                })
                 ->orderBy('created_at', 'desc')
                 ->get(),
         ]);

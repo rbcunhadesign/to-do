@@ -44,6 +44,7 @@ class ToDoCrudTest extends TestCase
 
         $todo1 = factory(ToDo::class)->create(['user_id' => $user->id, 'complete' => 0]);
         $todo2 = factory(ToDo::class)->create(['user_id' => $user->id, 'complete' => 0]);
+        factory(ToDo::class)->create(['complete' => 0]);
 
         $this->json('get', route('app.todo-fetch'))
             ->assertJson([
