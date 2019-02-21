@@ -1,5 +1,5 @@
 <template>
-  <div class="group relative flex flex-row items-center border-b border-grey-light py-2 mb-2">
+  <div :class="['group relative flex flex-row items-center border-b border-grey-light py-2 mb-2', { deleting: deleting }]">
     <div :class="['rounded-full border mr-4', checked ? '' : 'p-3 shadow-inner']"
          role="checkbox"
          @click="changeStatus"
@@ -47,6 +47,7 @@
       return {
         title: this.todo.title,
         checked: this.todo.complete,
+        deleting: false,
       }
     },
     
@@ -80,14 +81,27 @@
       },
 
       deleteTodo() {
+        this.deleting = true;
         axios.delete(`/app/todo/${this.todo.id}`)
-                .then(() => {
-                  this.$emit('deleteTodo', this.index)
-                })
-                .catch(() => {
-                  console.warn('Cannot delete to-dos at this time..')
-                })
+          .then(() => {
+            this.$emit('deleteTodo', this.index)
+          })
+          .catch(() => {
+            this.deleting = false;
+            console.warn('Cannot delete to-dos at this time..')
+          })
       },
     },
   }
 </script>
+
+<style scoped>
+  .deleting {
+    animation: fade-out .4s linear;
+  }
+
+    @keyframes fade-out {
+      from { opacity: 1 }
+      to { opacity: 0 }
+    }
+</style>
