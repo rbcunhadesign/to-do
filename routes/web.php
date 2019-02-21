@@ -13,7 +13,7 @@
 
 Auth::routes(['verify' => true]);
 
-Route::middleware(['auth', 'verified', 'json-only'])
+Route::middleware(['auth', 'json-only'])
     ->prefix('app')
     ->as('app.')
     ->group(function() {
@@ -29,4 +29,4 @@ Route::middleware(['auth', 'verified', 'json-only'])
         Route::delete('todo', 'ToDoController@destroyComplete')->name('todo-destroy-complete');
     });
 
-Route::middleware('verified')->get('/{any}', 'SpaController')->where('any', '.*');
+Route::middleware('auth')->get('/{any}', 'SpaController')->where('any', '.*');
