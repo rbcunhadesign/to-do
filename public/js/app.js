@@ -1979,6 +1979,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /*global axios*/
 
@@ -1994,7 +2001,8 @@ __webpack_require__.r(__webpack_exports__);
       todos: [],
       showHelperText: false,
       showCompleteOnly: false,
-      next_id: null
+      next_id: null // this ID is a dummy id just so Vue can use it as a v-key
+
     };
   },
   created: function created() {
@@ -2029,7 +2037,7 @@ __webpack_require__.r(__webpack_exports__);
             });
 
             _this2.todo = '';
-            _this2.next_id = response.data.next_id;
+            _this2.next_id = response.data.next_id + 10000; // We add 10k to prevent Vue from throwing a duplicate key error
           }).catch(function () {
             console.warn('Cannot create to-dos at this time');
           });
@@ -2037,13 +2045,16 @@ __webpack_require__.r(__webpack_exports__);
           var title = this.todo;
           this.todos.unshift({
             id: this.next_id++,
+            // this ID is a dummy id just so Vue can use it as a v-key
             title: this.todo,
             complete: false
           });
           this.todo = '';
           axios.post('/app/todo', {
             title: title
-          }).then(function (response) {}).catch(function () {
+          }).then(function (response) {
+            _this2.todos[0].id = response.data.next_id - 1;
+          }).catch(function () {
             _this2.todos.splice(0, 1);
 
             _this2.todo = title;
@@ -21938,8 +21949,26 @@ var render = function() {
             1
           )
         : _vm.todos.length < 1 && !_vm.loading
-        ? _c("h3", { staticClass: "text-center text-grey mt-4" }, [
-            _vm._v("\n      Good job your list is empty!\n    ")
+        ? _c("div", { staticClass: "flex flex-col w-full mt-4 mb-6" }, [
+            _c(
+              "span",
+              {
+                staticClass:
+                  "text-xs text-blue-light cursor-pointer ml-auto hover:text-blue",
+                on: { click: _vm.toggleComplete }
+              },
+              [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(_vm.showCompleteOnly ? "Show" : "Hide") +
+                    " complete\n    "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("h3", { staticClass: "text-center text-grey mt-4" }, [
+              _vm._v("\n        Good job your list is empty!\n      ")
+            ])
           ])
         : _vm._e()
     ])

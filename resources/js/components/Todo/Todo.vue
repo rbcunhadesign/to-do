@@ -47,9 +47,16 @@
         />
       </div>
 
-      <h3 v-else-if="todos.length < 1 && !loading" class="text-center text-grey mt-4">
-        Good job your list is empty!
-      </h3>
+      <div v-else-if="todos.length < 1 && !loading" class="flex flex-col w-full mt-4 mb-6">
+        <span class="text-xs text-blue-light cursor-pointer ml-auto hover:text-blue"
+              @click="toggleComplete"
+        >
+        {{ showCompleteOnly ? 'Show' : 'Hide' }} complete
+      </span>
+        <h3 class="text-center text-grey mt-4">
+          Good job your list is empty!
+        </h3>
+      </div>
     </div>
   </div>
 </template>
@@ -68,7 +75,7 @@
         todos: [],
         showHelperText: false,
         showCompleteOnly: false,
-        next_id: null,
+        next_id: null, // this ID is a dummy id just so Vue can use it as a v-key
       }
     },
 
@@ -105,7 +112,7 @@
                   complete: false
                 });
                 this.todo = '';
-                this.next_id = response.data.next_id;
+                this.next_id = response.data.next_id + 10000; // We add 10k to prevent Vue from throwing a duplicate key error
               })
               .catch(() => {
                 console.warn('Cannot create to-dos at this time')
@@ -113,7 +120,7 @@
           } else {
             let title = this.todo;
             this.todos.unshift({
-              id: this.next_id++,
+              id: this.next_id++, // this ID is a dummy id just so Vue can use it as a v-key
               title: this.todo,
               complete: false
             });
@@ -123,7 +130,7 @@
               title: title,
             })
               .then(response => {
-
+                this.todos[0].id = response.data.next_id - 1;
               })
               .catch(() => {
                 this.todos.splice(0, 1);
